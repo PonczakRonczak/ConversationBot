@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/ConversationBot/static/css/main.9f663438.css",
+    "main.js": "/ConversationBot/static/js/main.a0f16004.js",
+    "static/js/787.ffb84269.chunk.js": "/ConversationBot/static/js/787.ffb84269.chunk.js",
+    "index.html": "/ConversationBot/index.html",
+    "main.9f663438.css.map": "/ConversationBot/static/css/main.9f663438.css.map",
+    "main.a0f16004.js.map": "/ConversationBot/static/js/main.a0f16004.js.map",
+    "787.ffb84269.chunk.js.map": "/ConversationBot/static/js/787.ffb84269.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.9f663438.css",
+    "static/js/main.a0f16004.js"
+  ]
+}
