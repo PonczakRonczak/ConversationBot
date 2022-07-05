@@ -11,7 +11,7 @@ import moment from "moment";
 import "../../App.css";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import Loader from "react-loader-spinner";
-import { Tooltip, Select, Input, Button } from "antd";
+import { Tooltip, Select, Input, Button, Switch } from "antd";
 import conversations from '../../conversations.json'
 
 export const ShowingBar = ({
@@ -24,6 +24,7 @@ export const ShowingBar = ({
   setLoadingSelectState,
   loadingShowingState,
   setLoadingShowingState,
+  validationSwitch,
 }) => {
   const [censoredState, setCensoredState] = useState(true);
   useEffect(() => {
@@ -176,7 +177,7 @@ export const ShowingBar = ({
                                 />
                               </div>
                             ) : (
-                              <>{conversation.messageValidated}</>
+                              <>{!validationSwitch ? conversation.messageValidated : conversation.message}</>
                             )
                           }
                         >
@@ -207,7 +208,7 @@ export const ShowingBar = ({
                               }
                             }}
                           >
-                            {conversation.message}
+                            {validationSwitch ? conversation.messageValidated : conversation.message}
                           </div>
                         </Tooltip>
                       </div>
