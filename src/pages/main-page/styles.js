@@ -8,12 +8,11 @@ export const MainPageWrapper = styled.div`
 
 export const HeaderWrapper = styled.div`
   display: flex;
-  flex: 1;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   font-weight: 800;
-  height: 50px;
+  height: 60px;
   background-color: #ecb800;
   &div {
     background-color: red;

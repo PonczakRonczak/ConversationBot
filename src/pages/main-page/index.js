@@ -41,7 +41,7 @@ export const MainPage = () => {
       <MainPageWrapper>
         <HeaderWrapper>
         Pokaz przerobioną wersję wiadomości (To co widzą widzi osoba która dostaje wiadomość)
-          <div><Switch onChange={() => setValidationSwitch((prev) => !prev)} /></div>
+          <div><Switch checked={validationSwitch} onChange={() => setValidationSwitch((prev) => !prev)} /></div>
         </HeaderWrapper>
         <div style={{ display: "flex" }}>
           <SelectBar
