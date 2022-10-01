@@ -12,7 +12,7 @@ export const HeaderWrapper = styled.div`
   justify-content: center;
   align-items: center;
   font-weight: 800;
-  height: 60px;
+  height: 50px;
   background-color: #ecb800;
   &div {
     background-color: red;

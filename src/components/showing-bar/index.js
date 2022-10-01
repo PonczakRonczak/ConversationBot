@@ -6,13 +6,16 @@ import {
   SendMessageBarWrapper,
   ShowingBarContentWrapper,
 } from "./styles";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Fragment } from "react";
 import moment from "moment";
 import "../../App.css";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import Loader from "react-loader-spinner";
 import { Tooltip, Select, Input, Button, Switch } from "antd";
-import conversations from '../../conversations.json'
+import { format } from "date-fns";
+import conversations1 from "../../conversations/conversations1.json";
+import conversations2 from "../../conversations/conversations2.json";
+import conversations3 from "../../conversations/conversations3.json";
 
 export const ShowingBar = ({
   selectedId,
@@ -25,16 +28,33 @@ export const ShowingBar = ({
   loadingShowingState,
   setLoadingShowingState,
   validationSwitch,
+  selectedPage,
 }) => {
   const [censoredState, setCensoredState] = useState(true);
+
+  const getCorrectConversation = () => {
+    if (selectedPage === 1) {
+      return conversations3;
+    }
+    if (selectedPage === 2) {
+      return conversations2;
+    }
+    if (selectedPage === 3) {
+      return conversations1;
+    }
+  };
+  const conversations = getCorrectConversation();
+
   useEffect(() => {
     fetchApi(selectedId);
   }, [selectedId.id, fetchApiToggler]);
 
   const fetchApi = async (selectedId) => {
     try {
-      if(conversations && selectedId?.id?.$oid.length) {
-        const fetchedData = conversations.find((item) => item?._id?.$oid === selectedId?.id?.$oid)
+      if (conversations && selectedId?.id?.$oid.length) {
+        const fetchedData = conversations.find(
+          (item) => item?._id?.$oid === selectedId?.id?.$oid
+        );
         await setSelectedConversation(fetchedData);
         setLoadingShowingState(false);
       }
@@ -58,8 +78,8 @@ export const ShowingBar = ({
             }}
           >
             <Loader
-              type="Oval"
-              color="#00BFFF"
+              type='Oval'
+              color='#00BFFF'
               height={100}
               width={100}
               timeout={10000} //3 secs
@@ -69,7 +89,7 @@ export const ShowingBar = ({
           <>
             {selectedConversation.conversation &&
               selectedConversation.conversation.map((conversation) => (
-                <>
+                <Fragment key={Math.random()}>
                   <MessageWrapper
                     style={{
                       display: "flex",
@@ -83,19 +103,20 @@ export const ShowingBar = ({
                   >
                     <AvatarWrapper>
                       <img
-                        id="user-avatar"
+                        id='user-avatar'
                         src={`http://avatars.gadu-gadu.pl/${conversation.author}?default=http://avatars.gg.pl/default,100`}
                         onError={(e) => {
                           e.target.onerror = null;
                           e.target.src =
                             "https://www.pathwaysvermont.org/wp-content/uploads/2017/03/avatar-placeholder-e1490629554738.png";
                         }}
-                        alt="User avatar"
+                        alt='User avatar'
                       />
                     </AvatarWrapper>
+                    {console.log(new Date(conversation.date.$date.$numberLong))}
                     <MessageContentWrapper>
                       <div style={{ fontStyle: "italic", fontSize: "12px" }}>
-                        {moment(conversation.date)
+                        {moment(Number(conversation.date.$date.$numberLong))
                           .local()
                           .format("YYYY-MM-DD HH:mm:ss")}
                       </div>
@@ -138,7 +159,7 @@ export const ShowingBar = ({
                       <div>
                         <Tooltip
                           overlayStyle={{ whiteSpace: "pre-line" }}
-                          placement="bottom"
+                          placement='bottom'
                           title={
                             conversation.messageValidated.substr(
                               conversation.messageValidated.length - 3
@@ -171,13 +192,17 @@ export const ShowingBar = ({
                                     "https://p.gg.pl/thumb/p/d/"
                                   )}
                                   onClick={() => setCensoredState(false)}
-                                  height="100%"
-                                  width="100%"
+                                  height='100%'
+                                  width='100%'
                                   alt={`${conversation.author}`}
                                 />
                               </div>
                             ) : (
-                              <>{!validationSwitch ? conversation.messageValidated : conversation.message}</>
+                              <>
+                                {!validationSwitch
+                                  ? conversation.messageValidated
+                                  : conversation.message}
+                              </>
                             )
                           }
                         >
@@ -208,19 +233,21 @@ export const ShowingBar = ({
                               }
                             }}
                           >
-                            {validationSwitch ? conversation.messageValidated : conversation.message}
+                            {validationSwitch
+                              ? conversation.messageValidated
+                              : conversation.message}
                           </div>
                         </Tooltip>
                       </div>
                     </MessageContentWrapper>
                   </MessageWrapper>
-                </>
+                </Fragment>
               ))}
           </>
         )}
       </ShowingBarWrapper>
       <SendMessageBarWrapper>
-        <div className="message-bar">
+        <div className='message-bar'>
           <Input.Group
             compact
             style={{
@@ -230,8 +257,7 @@ export const ShowingBar = ({
               WebkitAlignItems: "center",
               width: "90%",
             }}
-          >
-          </Input.Group>
+          ></Input.Group>
         </div>
       </SendMessageBarWrapper>
     </ShowingBarContentWrapper>

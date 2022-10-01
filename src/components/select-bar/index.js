@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-expressions */
 import { useState, useEffect } from "react";
 import {
   SelectBarWrapper,
@@ -9,7 +10,9 @@ import axios from "axios";
 import Loader from "react-loader-spinner";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import { Pagination } from "antd";
-import conversations from '../../conversations.json'
+import conversations1 from "../../conversations/conversations1.json";
+import conversations2 from "../../conversations/conversations2.json";
+import conversations3 from "../../conversations/conversations3.json";
 
 export const SelectBar = ({
   selectedId,
@@ -22,25 +25,62 @@ export const SelectBar = ({
   setLoadingSelectState,
   loadingShowingState,
   setLoadingShowingState,
+  selectedPage,
 }) => {
   const [conversationsList, setConversationsList] = useState([]);
   const [numberOfDbResults, setNumberOfDbResults] = useState(0);
   const [actualPage, setActualPage] = useState(0);
+
+  const getCorrectConversation = () => {
+    if (selectedPage === 3) {
+      return conversations1;
+    }
+    if (selectedPage === 2) {
+      return conversations2;
+    }
+    if (selectedPage === 1) {
+      return conversations3;
+    }
+  };
+  const conversations = getCorrectConversation();
+
+  const getBadge = (id) => {
+    const conv1 = conversations1.find(
+      (item) => item.personOne === id || item.personTwo === id
+    )
+      ? 1
+      : 0;
+    const conv2 = conversations2.find(
+      (item) => item.personOne === id || item.personTwo === id
+    )
+      ? 1
+      : 0;
+    const conv3 = conversations3.find(
+      (item) => item.personOne === id || item.personTwo === id
+    )
+      ? 1
+      : 0;
+    return 0 + conv1 + conv2 + conv3;
+  };
+
   const fetchApi = async (page, limit, sort_by, increasing) => {
     try {
-      const fetchedData = conversations
-      console.log(fetchedData.slice(actualPage * 10, (actualPage + 1) * 10))
+      const fetchedData = conversations;
       setNumberOfDbResults(fetchedData.length);
       if (sortingState === "date") {
         setConversationsList(
-          fetchedData.sort(function (a, b) {
-            return new Date(b.date) - new Date(a.date);
-          }).slice(actualPage * 10, (actualPage + 1) * 10)
+          fetchedData
+            .sort(function (a, b) {
+              return new Date(b.date) - new Date(a.date);
+            })
+            .slice(actualPage * 10, (actualPage + 1) * 10)
         );
       }
       if (sortingState === "number") {
         setConversationsList(
-          fetchedData.sort((a, b) => b.__v - a.__v).slice(actualPage * 10, (actualPage + 1) * 10)
+          fetchedData
+            .sort((a, b) => b.__v - a.__v)
+            .slice(actualPage * 10, (actualPage + 1) * 10)
         );
       }
 
@@ -69,8 +109,8 @@ export const SelectBar = ({
             }}
           >
             <Loader
-              type="Oval"
-              color="#00BFFF"
+              type='Oval'
+              color='#00BFFF'
               height={100}
               width={100}
               timeout={10000} //3 secs
@@ -94,9 +134,9 @@ export const SelectBar = ({
                 cardColor={item._id === selectedId.id ? "#1360e8" : "#ecb800"}
                 borderColor={item._id === selectedId.id ? "red" : "#ecb800"}
               >
-                <div className="tooltip">
+                <div className='tooltip'>
                   <span
-                    className="tooltiptext"
+                    className='tooltiptext'
                     style={{
                       left: "-350px",
                       top: "70px",
@@ -109,9 +149,24 @@ export const SelectBar = ({
                       alt={`${item.personTwo}'s avatar`}
                     />
                   </span>
+                  <div
+                    style={{
+                      display: "flex",
+                      position: "absolute",
+                      top: 50,
+                      backgroundColor: "black",
+                      height: 20,
+                      width: 20,
+                      justifyContent: "center",
+                      borderRadius: 10,
+                      color: "white",
+                    }}
+                  >
+                    {getBadge(item.personTwo)}
+                  </div>
                   <img
                     src={`http://avatars.gadu-gadu.pl/${item.personTwo}?default=http://avatars.gg.pl/default,100`}
-                    alt="User avatar"
+                    alt='User avatar'
                     onError={(e) => {
                       e.target.onerror = null;
                       e.target.src =
@@ -144,9 +199,9 @@ export const SelectBar = ({
                   <div>{`Wymienili ${item.__v} wiadomości`}</div>
                 </div>
 
-                <div className="tooltip">
+                <div className='tooltip'>
                   <span
-                    className="tooltiptext"
+                    className='tooltiptext'
                     style={{
                       left: "70px",
                       top: "70px",
@@ -159,9 +214,24 @@ export const SelectBar = ({
                       alt={`${item.personOne}'s avatar`}
                     />
                   </span>
+                  <div
+                    style={{
+                      display: "flex",
+                      position: "absolute",
+                      top: 50,
+                      backgroundColor: "black",
+                      height: 20,
+                      width: 20,
+                      justifyContent: "center",
+                      borderRadius: 10,
+                      color: "white",
+                    }}
+                  >
+                    {getBadge(item.personOne)}
+                  </div>
                   <img
                     src={`https://avatars.gg.pl/user,${item.personOne}/s,100x100`}
-                    alt="User avatar"
+                    alt='User avatar'
                     onError={(e) => {
                       e.target.onerror = null;
                       e.target.src =

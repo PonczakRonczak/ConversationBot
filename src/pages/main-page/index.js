@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Select, Switch } from "antd";
+import { Pagination, Select, Switch } from "antd";
 
 import { SelectBar } from "../../components/select-bar";
 import { ShowingBar } from "../../components/showing-bar";
@@ -19,7 +19,8 @@ export const MainPage = () => {
   const [fetchApiToggler, setFetchApiToggler] = useState(false);
   const [loadingSelectState, setLoadingSelectState] = useState(true);
   const [loadingShowingState, setLoadingShowingState] = useState(false);
-  const [validationSwitch, setValidationSwitch] = useState(true)
+  const [validationSwitch, setValidationSwitch] = useState(true);
+  const [selectedPage, setSelectedPage] = useState(1);
 
   const { Option } = Select;
 
@@ -40,8 +41,25 @@ export const MainPage = () => {
     <>
       <MainPageWrapper>
         <HeaderWrapper>
-        Pokaz przerobioną wersję wiadomości (To co widzą widzi osoba która dostaje wiadomość)
-          <div><Switch checked={validationSwitch} onChange={() => setValidationSwitch((prev) => !prev)} /></div>
+          <div style={{ position: "absolute", top: 10, left: 25 }}>
+            <Pagination
+              defaultCurrent={1}
+              total={3}
+              onChange={(e) => {
+                setSelectedPage(e);
+              }}
+              showSizeChanger={false}
+              pageSize={1}
+            />
+          </div>
+          Pokaz przerobioną wersję wiadomości (To co widzą widzi osoba która
+          dostaje wiadomość)
+          <div>
+            <Switch
+              checked={validationSwitch}
+              onChange={() => setValidationSwitch((prev) => !prev)}
+            />
+          </div>
         </HeaderWrapper>
         <div style={{ display: "flex" }}>
           <SelectBar
@@ -55,6 +73,7 @@ export const MainPage = () => {
             setLoadingSelectState={setLoadingSelectState}
             loadingShowingState={loadingShowingState}
             setLoadingShowingState={setLoadingShowingState}
+            selectedPage={selectedPage}
           />
           <ShowingBar
             selectedConversation={selectedConversation}
@@ -67,6 +86,7 @@ export const MainPage = () => {
             loadingShowingState={loadingShowingState}
             setLoadingShowingState={setLoadingShowingState}
             validationSwitch={validationSwitch}
+            selectedPage={selectedPage}
           />
         </div>
       </MainPageWrapper>
