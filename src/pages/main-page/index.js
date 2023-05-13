@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Pagination, Select, Switch } from "antd";
+import { Input, Pagination, Select, Switch } from "antd";
 
 import { SelectBar } from "../../components/select-bar";
 import { ShowingBar } from "../../components/showing-bar";
@@ -21,6 +21,7 @@ export const MainPage = () => {
   const [loadingShowingState, setLoadingShowingState] = useState(false);
   const [validationSwitch, setValidationSwitch] = useState(true);
   const [selectedPage, setSelectedPage] = useState(1);
+  const [inputValue, setInputValue] = useState("");
 
   const { Option } = Select;
 
@@ -60,6 +61,12 @@ export const MainPage = () => {
               onChange={() => setValidationSwitch((prev) => !prev)}
             />
           </div>
+          <div style={{ position: "absolute", top: 10, right: 25 }}>
+            <Input
+              placeholder="Wyszukaj"
+              onChange={(e) => setInputValue(e.target.value)}
+            />
+          </div>
         </HeaderWrapper>
         <div style={{ display: "flex" }}>
           <SelectBar
@@ -74,6 +81,7 @@ export const MainPage = () => {
             loadingShowingState={loadingShowingState}
             setLoadingShowingState={setLoadingShowingState}
             selectedPage={selectedPage}
+            inputValue={inputValue}
           />
           <ShowingBar
             selectedConversation={selectedConversation}
